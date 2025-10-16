@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tema base (modo claro e escuro) */
+:root {
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+/* Reset e estilos globais */
+* {
+    @apply box-border p-0 m-0;
+}
+
+html,
+body {
+    @apply w-full min-h-screen overflow-x-hidden;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    @apply text-inherit no-underline;
+}
+
+input {
+    @apply focus:ring-2 focus:ring-blue-500 outline-none;
+}
+
+button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+}
