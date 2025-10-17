@@ -17,20 +17,49 @@ export default function RegisterPage() {
         setError('');
         setLoading(true);
 
-        const { data, error } = await supabase.auth.signUp({
+        // 1 - Cria o utilizador na auth.users
+        const { data, error: signUpError } = await supabase.auth.signUp({
             email,
             password,
         });
 
-        setLoading(false);
-
-        if (error) {
-            setError(error.message);
+        if (signUpError) {
+            setError(signUpError.message);
+            setLoading(false);
             return;
         }
 
-        // Caso o utilizador seja criado com sucesso
+        // 2 - Garante que o utilizador foi criado, que vem do signup
+        const user = data?.user;
+        if (!user) {
+            setError("Erro ao criar conta. Tenta novamente.");
+            setLoading(false);
+            return;
+        }
+
+        // 3 - Cria logo o registo na tabela public.users após o registo na tabela auth.users
+        const { error: insertError } = await supabase
+            .from("users")
+            .insert([
+                {
+                    id: user.id,      // mesmo ID do auth.users
+                    username: user.email, // usar email como username inicial
+                    coins: 1000,      // saldo inicial
+                    bio: "",          // opcional
+                    created_at: new Date().toISOString(),
+                },
+            ]);
+
+        if (insertError) {
+            console.error("Erro ao criar registo em public.users:", insertError);
+            setError("Erro ao criar perfil do utilizador.");
+            setLoading(false);
+            return;
+        }
+
+        // 4 - Caso o utilizador seja criado com sucesso
         alert('Conta criada! Verifica o teu email para confirmar.');
+        setLoading(false);
         router.push('/login');
     };
 

@@ -23,14 +23,14 @@ export default function LoginPage() {
 
         setLoading(false);
 
-        //console.log(error) // verificar erros
+        console.log(error) // verificar erros
         if (error) {
             setError('Email ou password incorretos');
             return;
         }
 
         alert('Login com Sucesso!');
-        router.push('/login');
+        router.push('/');
     }
 
     // console.log(error) //verificar erro
