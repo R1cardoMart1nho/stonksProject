@@ -1,3 +1,11 @@
 {
-    "search.useIgnoreFiles": true
+    "css.lint.unknownAtRules": "ignore",
+    "search.useIgnoreFiles": true,
+    "css.validate": false,
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "html"
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    }
 }

@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 /* Tema base (modo claro e escuro) */
-:root {
+/* :root {
     --background: #ffffff;
     --foreground: #171717;
 }
@@ -13,10 +15,10 @@
         --background: #0a0a0a;
         --foreground: #ededed;
     }
-}
+} */
 
 /* Reset e estilos globais */
-* {
+/* * {
     @apply box-border p-0 m-0;
 }
 
@@ -40,4 +42,4 @@ input {
 
 button:disabled {
     @apply opacity-50 cursor-not-allowed;
-}
+} */

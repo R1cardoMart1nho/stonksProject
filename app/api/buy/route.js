@@ -89,6 +89,24 @@ export async function POST(req) {
             return NextResponse.json({ error: updateError.message }, { status: 500 });
         }
 
+        // 7 - Atualizar preço (flutuação de 0.5% por compra)
+        // Define um passo de quantidade para flutuação, ex: 5 unidades
+        const step = 5;
+        const changePerStep = 0.005; // 0.5% por step
+        const steps = Math.floor(quantity / step);
+
+        const newPrice = assetData.current_price * (1 + changePerStep * steps);
+
+        const { error: priceError } = await supabaseAdmin
+            .from("assets")
+            .update({ current_price: newPrice })
+            .eq("id", asset_id);
+
+        if (priceError) {
+            console.error("Erro ao atualizar preço:", priceError);
+            return NextResponse.json({ error: priceError.message }, { status: 500 });
+        }
+
         // Retornar sucesso
         return NextResponse.json({ success: true, message: "Compra realizada!" });
 

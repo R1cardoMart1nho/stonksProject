@@ -82,7 +82,20 @@ export async function POST(req) {
             .eq("id", user.id);
         if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 });
 
+        // 8 - Atualizar preço (flutuação de 0.5% por compra)
+        const newPrice = Math.max(assetData.current_price * (1 - 0.005), 0.01);
+        const { error: priceError } = await supabaseAdmin
+            .from("assets")
+            .update({ current_price: newPrice })
+            .eq("id", asset_id);
+
+        if (priceError) {
+            console.error("Erro ao atualizar preço:", priceError);
+            return NextResponse.json({ error: priceError.message }, { status: 500 });
+        }
+
         return NextResponse.json({ success: true, message: "Venda realizada!" });
+
     } catch (error) {
         console.error("Erro em /api/sell:", error);
         return NextResponse.json({ error: "Erro Inesperado!" }, { status: 500 });

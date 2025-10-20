@@ -10,6 +10,7 @@ export default function Home() {
   // Busca assets  + user info
   const [assets, setAssets] = useState([]);
   const user = useAuth();
+  const [quantities, setQuantities] = useState({});
 
   // Logout
   const handleLogout = async () => {
@@ -32,7 +33,7 @@ export default function Home() {
   }, []);
 
   // Função para comprar asset (apenas logado)
-  const buy = async (assetId, quantity = 1) => {
+  async function handleBuy(assetId, quantity) {
     try {
       // 1 - Verifica se existe sessão
       const {
@@ -51,12 +52,11 @@ export default function Home() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.access_token}`, // token enviado!
         },
-        body: JSON.stringify({ asset_id: assetId, quantity }),
+        body: JSON.stringify({ user_id: user.id, asset_id: assetId, quantity }),
       });
 
       // 3 - Lê resposta
       const data = await res.json();
-
       if (!res.ok) {
         throw new Error(data.error || "Erro ao realizar compra");
       }
@@ -73,7 +73,7 @@ export default function Home() {
 
   // Função para vender asset (apenas logado)
   // 1 - Verifica se existe sessão
-  const sell = async (asset_id, quantity = 1) => {
+  async function handleSell(assetId, quantity) {
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -90,7 +90,7 @@ export default function Home() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({ asset_id, quantity }),
+      body: JSON.stringify({ user_id: user.id, asset_id: assetId, quantity }),
     });
 
     // 3 - Lê resposta
@@ -98,64 +98,89 @@ export default function Home() {
     if (data.error) alert(data.error);
     else alert("Venda realizada!");
   }
-};
 
-// HTML
-return (
-  <main className="flex min-h-screen items-center justify-center bg-gray-950 text-gray-100 p-8">
-    <h1 className="text-4xl font-bold mb-2">Bem-vindo ao OneStonks! </h1>
-    <p className="mb-4">(ou um Comédia Stonks... Vamos ver)</p>
+  // HTML
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-gray-950 text-gray-100 p-8">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-2">Bem-vindo ao OneStonks!</h1>
+        <p className="mb-4">(ou um Comédia Stonks... Vamos ver)</p>
 
-    <div className="flex gap-4 mb-8">
-      <Link
-        href="/login"
-        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
-      >
-        Login<br></br>
-      </Link>
-      <Link
-        href="/register"
-        className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg transition"
-      >
-        Registar
-      </Link>
-    </div>
-
-    {user ? (
-      <div className="mb-4">
-        <p className="self-center">Olá, {user.email}</p>
-        <button
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </div>
-    ) : (
-      <p>Não está logado</p>
-    )}
-
-    <h2 className="text-2xl font-bold mb-4">Mercado de Humoristas</h2>
-    <div className="grid gap-4 w-full max-w-2xl">
-      {assets.map(asset => (
-        <div key={asset.id} className="flex justify-between items-center p-4 border rounded bg-gray-800">
-          <div>
-            <strong>{asset.name}</strong> | {asset.symbol} | {asset.current_price}€
-          </div>
-          <button
-            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded"
-            onClick={() => buy(asset.id)}
+        <div className="flex gap-4 mb-8 justify-center">
+          <Link
+            href="/login"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
           >
-            <button
-              className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded"
-              onClick={() => sell(asset.id)}>Vender</button>
-            Comprar
-          </button>
+            Login
+          </Link>
+          <Link
+            href="/register"
+            className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg transition"
+          >
+            Registar
+          </Link>
         </div>
-      ))}
-    </div>
 
-  </main>
-);
+        {user ? (
+          <div className="mb-4">
+            <p className="self-center">Olá, {user.email}</p>
+            <div className="flex gap-4 mb-8 justify-center">
+              <Link
+                href="/portfolio"
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
+              >
+                Portefólio
+              </Link>
+            </div>
+            <button
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <p>Não está logado</p>
+        )}
 
-
+        <h2 className="text-2xl font-bold mb-4">Mercado de Humoristas</h2>
+        <div className="grid gap-4 w-full max-w-2xl mx-auto">
+          {assets.map((asset) => (
+            <div
+              key={asset.id}
+              className="flex justify-between items-center p-4 border rounded bg-gray-800"
+            >
+              <div>
+                <strong>{asset.name}</strong> | {asset.symbol} |{" "}
+                {asset.current_price}€
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  defaultValue="1"
+                  className="w-20 text-center rounded bg-gray-800 border border-gray-700"
+                  onChange={(e) => setQuantities({ ...quantities, [asset.id]: Number(e.target.value) })}
+                />
+                <button
+                  className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded"
+                  //onClick={() => buy(asset.id)}
+                  onClick={() => handleBuy(asset.id, quantities[asset.id] || 1)}
+                >
+                  Comprar
+                </button>
+                <button
+                  className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 rounded"
+                  //onClick={() => sell(asset.id)}
+                  onClick={() => handleSell(asset.id, quantities[asset.id] || 1)}
+                >
+                  Vender
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
