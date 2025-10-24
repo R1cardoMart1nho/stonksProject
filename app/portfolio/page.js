@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
+import { useTheme } from '@/contexts/themeContext';
 
 export default function Portfolio() {
     const user = useAuth();
@@ -11,6 +12,7 @@ export default function Portfolio() {
     const [isLoadingUser, setIsLoadingUser] = useState(true);
     const [portfolio, setPortfolio] = useState([]);
     const [coins, setCoins] = useState(0);
+    const { isDark, toggleTheme } = useTheme(); // Tema da página
 
     useEffect(() => {
         if (!user) return; // garante que só corre depois do login
@@ -120,99 +122,177 @@ export default function Portfolio() {
     // console.log("tipo:", typeof transactions.created_at);
     // console.log("é Date?", transactions.created_at instanceof Date);
 
-
-
+    // HTML principal
     return (
-        <main className="min-h-screen bg-gray-950 text-gray-100 p-8">
-            <div className="bg-red-500 text-white p-4 rounded-lg">
-                Se isto ficar vermelho, o Tailwind está funcionando!
-            </div>
-            <div className="text-center mt-6">
+        <main className="min-h-screen bg-background text-foreground p-4 sm:p-6 lg:p-8">
+
+            {/* Botão de tema */}
+            <button
+                onClick={toggleTheme}
+                className="absolute top-4 right-4 p-2 sm:p-3 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300 shadow-lg border border-gray-300 dark:border-gray-600"
+                aria-label="Alternar tema"
+            >
+                {isDark ? '🌙' : '☀️'}
+            </button>
+
+            {/* Cabeçalho */}
+            <div className="text-center mb-8 sm:mb-12 max-w-2xl mx-auto">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    O teu Portefólio
+                </h1>
+
+                {/* Saldo */}
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mb-6">
+                    <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
+                        Saldo: <span className="text-green-600 dark:text-green-400">{coins.toFixed(2)}€</span>
+                    </p>
+                </div>
+
+                {/* Botão Voltar */}
                 <Link
                     href="/"
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg"
+                    className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105"
                 >
-                    Voltar ao Mercado
+                    ← Voltar ao Mercado
                 </Link>
             </div>
 
-            <h1 className="text-3xl font-bold mb-6 text-center">O teu Portefólio</h1>
+            {/* Container Principal */}
+            <div className="space-y-6 lg:space-y-8 max-w-4xl mx-auto">
 
-            <div className="mb-6 text-center">
-                <p className="text-xl">
-                    <strong>Saldo atual:</strong> {coins.toFixed(2)}€
-                </p>
-            </div>
+                {/* Portfólio */}
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-3">
+                        📊 Os teus Ativos
+                    </h2>
 
-            <div className="max-w-3xl mx-auto bg-gray-900 p-6 rounded-lg shadow-lg">
-                <h2 className="text-xl mb-4 font-semibold">Os teus ativos</h2>
-                {portfolio.length === 0 ? (
-                    <p>Não tens ativos ainda 😅</p>
-                ) : (
-                    <table className="w-full border-collapse">
-                        <thead>
-                            <tr className="text-left border-b border-gray-700">
-                                <th className="py-2">Nome</th>
-                                <th>Qtd</th>
-                                <th>Preço Atual</th>
-                                <th>Investido</th>
-                                <th>Lucro</th>
-                                <th>%</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {portfolio.map((p) => (
-                                <tr key={p.asset.symbol} className="border-b border-gray-800">
-                                    <td className="py-2">{p.asset.name}</td>
-                                    <td>{p.quantity}</td>
-                                    <td>{p.asset.current_price.toFixed(2)}€</td>
-                                    <td>{p.invested.toFixed(2)}€</td>
-                                    <td className={p.profit >= 0 ? "text-green-400" : "text-red-400"}>
-                                        {p.profit.toFixed(2)}€
-                                    </td>
-                                    <td className={p.percent >= 0 ? "text-green-400" : "text-red-400"}>
-                                        {p.percent.toFixed(2)}%
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
+                    {portfolio.length === 0 ? (
+                        <div className="text-center py-8 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg">
+                                Não tens ativos ainda 😅
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="overflow-hidden"> {/* ← Mudado de overflow-x-auto para hidden */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"> {/* ← Grid responsivo */}
+                                {portfolio.map((p) => (
+                                    <div key={p.asset.symbol} className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow">
+                                        {/* Cabeçalho do card */}
+                                        <div className="flex items-center gap-3 mb-3">
+                                            {p.asset.image_url && (
+                                                <img
+                                                    src={p.asset.image_url}
+                                                    alt={p.asset.name}
+                                                    className="w-10 h-10 rounded-lg object-cover border border-gray-300 dark:border-gray-600 flex-shrink-0"
+                                                />
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="font-semibold text-gray-800 dark:text-white text-sm truncate">
+                                                    {p.asset.name}
+                                                </div>
+                                                <div className="text-blue-600 dark:text-blue-400 font-mono text-xs">
+                                                    {p.asset.symbol}
+                                                </div>
+                                            </div>
+                                        </div>
 
-            {/* --- Histórico --- */}
-            <div className="max-w-3xl mx-auto bg-gray-900 p-6 rounded-lg shadow-lg">
-                <h2 className="text-xl mb-4 font-semibold">Histórico de Transações</h2>
-                {transactions.length === 0 ? (
-                    <p>Sem transações ainda 📉</p>
-                ) : (
-                    <table className="w-full border-collapse text-sm">
-                        <thead>
-                            <tr className="text-left border-b border-gray-700">
-                                <th className="py-2">Data</th>
-                                <th>Ativo</th>
-                                <th>Tipo</th>
-                                <th>Qtd</th>
-                                <th>Preço (€)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                        {/* Detalhes */}
+                                        <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600 dark:text-gray-400">Quantidade:</span>
+                                                <span className="font-mono text-gray-800 dark:text-white">{p.quantity}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600 dark:text-gray-400">Preço atual:</span>
+                                                <span className="font-mono text-gray-800 dark:text-white">{p.asset.current_price.toFixed(2)}€</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600 dark:text-gray-400">Investido:</span>
+                                                <span className="font-mono text-gray-800 dark:text-white">{p.invested.toFixed(2)}€</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600 dark:text-gray-400">Lucro:</span>
+                                                <span className={`font-mono font-semibold ${p.profit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                                                    }`}>
+                                                    {p.profit >= 0 ? "+" : ""}{p.profit.toFixed(2)}€
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between border-t border-gray-200 dark:border-gray-600 pt-2">
+                                                <span className="text-gray-600 dark:text-gray-400">Percentagem:</span>
+                                                <span className={`font-mono font-semibold ${p.percent >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                                                    }`}>
+                                                    {p.percent >= 0 ? "+" : ""}{p.percent.toFixed(2)}%
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Histórico - Versão simplificada */}
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-3">
+                        📈 Histórico de Transações
+                    </h2>
+
+                    {transactions.length === 0 ? (
+                        <div className="text-center py-8 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg">
+                                Sem transações ainda 📉
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-3"> {/* ← Lista vertical em vez de tabela */}
                             {transactions.map((t) => (
-                                <tr key={t.id} className="border-b border-gray-800">
-                                    <td>{formatTimestamp(t.created_at)} | </td>
-                                    <td>{t.assets?.name} | </td>
-                                    <td className={t.type === "buy" ? "text-green-400" : "text-red-400"}>
-                                        {t.type === "buy" ? "Compra" : "Venda"} |
-                                    </td>
-                                    <td>{t.quantity} | </td>
-                                    <td>{t.price_at_transaction.toFixed(2)}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
+                                <div key={t.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                        {/* Info principal */}
+                                        <div className="flex items-center gap-3 flex-1">
+                                            {t.assets?.image_url && (
+                                                <img
+                                                    src={t.assets.image_url}
+                                                    alt={t.assets.name}
+                                                    className="w-8 h-8 rounded object-cover border border-gray-300 dark:border-gray-600 flex-shrink-0"
+                                                />
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="font-semibold text-gray-800 dark:text-white text-sm">
+                                                    {t.assets?.name}
+                                                </div>
+                                                <div className="text-gray-600 dark:text-gray-400 text-xs">
+                                                    {formatTimestamp(t.created_at)}
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        {/* Detalhes da transação */}
+                                        <div className="flex items-center gap-4 text-sm">
+                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${t.type === "buy"
+                                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                                }`}>
+                                                {t.type === "buy" ? "🔼 Compra" : "🔻 Venda"}
+                                            </span>
+                                            <div className="text-right">
+                                                <div className="font-mono text-gray-800 dark:text-white">
+                                                    {t.quantity} × {t.price_at_transaction.toFixed(2)}€
+                                                </div>
+                                                <div className="font-mono text-gray-600 dark:text-gray-400 text-xs">
+                                                    Total: {(t.quantity * t.price_at_transaction).toFixed(2)}€
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
         </main>
     );
+
 }

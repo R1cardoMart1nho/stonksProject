@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from '@/contexts/themeContext'; // ← Importa ThemeProvider
 //import '@/styles/globals.css'
 
 const geistSans = Geist({
@@ -20,8 +21,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body className={"bg-black text-white min-h-screen font-sans " + geistSans.variable + " " + geistMono.variable}>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

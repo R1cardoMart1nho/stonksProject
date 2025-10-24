@@ -1,11 +1,13 @@
-@tailwind base;
+@import "tailwindcss";
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
-
+/* Variantes personalizadas para modo escuro */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Tema base (modo claro e escuro) */
-/* :root {
+:root {
     --background: #ffffff;
     --foreground: #171717;
 }
@@ -15,18 +17,25 @@
         --background: #0a0a0a;
         --foreground: #ededed;
     }
-} */
-
-/* Reset e estilos globais */
-/* * {
-    @apply box-border p-0 m-0;
 }
 
+/* Ou para dark mode baseado em classe */
+:root {
+    --color-background: #ffffff;
+    --color-foreground: #171717;
+}
+
+.dark {
+    --color-background: #0a0a0a;
+    --color-foreground: #ededed;
+}
+
+/* Reset e estilos globais */
 html,
 body {
     @apply w-full min-h-screen overflow-x-hidden;
-    background-color: var(--background);
-    color: var(--foreground);
+    background: var(--color-background);
+    color: var(--color-foreground);
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -37,9 +46,31 @@ a {
 }
 
 input {
-    @apply focus:ring-2 focus:ring-blue-500 outline-none;
+    @apply focus:outline-blue-500;
 }
 
 button:disabled {
     @apply opacity-50 cursor-not-allowed;
-} */
+}
+
+@layer utilities {
+    .min-w-0 {
+        min-width: 0;
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.2s ease-out;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
