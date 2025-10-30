@@ -90,12 +90,48 @@ export async function POST(req) {
         }
 
         // 7 - Atualizar preço (flutuação de 0.5% por compra)
+
         // Define um passo de quantidade para flutuação, ex: 5 unidades
+        // ✅ NOVO: Buscar net volume atual da VIEW
+        const { data: volumeData, error: volumeError } = await supabaseAdmin
+            .from("v_asset_volume")
+            .select("net_volume")
+            .eq("asset_id", asset_id)
+            .single();
+
+        if (volumeError) {
+            console.warn("⚠️ Erro ao buscar volume:", volumeError);
+            // Continua com volume zero se der erro
+        }
+
+        // Net volume atual (pode ser negativo se houver mais vendas)
+        const currentNetVolume = volumeData?.net_volume || 0;
+        // ✅ NOVA COMPRA: AUMENTA o net volume (mais procura)
+        const newNetVolume = currentNetVolume + quantity;
+        const netVolumeChange = newNetVolume - currentNetVolume;
+
+        // Calcular flutuação baseada no NET VOLUME
         const step = 5;
         const changePerStep = 0.005; // 0.5% por step
-        const steps = Math.floor(quantity / step);
 
-        const newPrice = assetData.current_price * (1 + changePerStep * steps);
+        // Usa o VALOR ABSOLUTO do net volume para os "steps"
+        //const steps = Math.floor(Math.abs(newNetVolume) / step);
+        let newPrice = assetData.current_price;
+
+        if (netVolumeChange > 0) {
+            // NET VOLUME AUMENTOU = mais procura = preço SOBE
+            const steps = Math.floor(netVolumeChange / step);
+            newPrice = assetData.current_price * (1 + changePerStep * steps);
+            console.log(`📈 NET VOLUME ↑ ${currentNetVolume} → ${newNetVolume} | Preço SOBE ${assetData.current_price} → ${newPrice}`);
+        } else if (netVolumeChange < 0) {
+            // NET VOLUME DIMINUIU = mais oferta = preço DESCE
+            const steps = Math.floor(Math.abs(netVolumeChange) / step);
+            newPrice = assetData.current_price * (1 - changePerStep * steps);
+            console.log(`📉 NET VOLUME ↓ ${currentNetVolume} → ${newNetVolume} | Preço DESCE ${assetData.current_price} → ${newPrice}`);
+        } else {
+            // Sem mudança
+            console.log(`➡️ NET VOLUME = ${currentNetVolume} | Preço mantém ${assetData.current_price}`);
+        }
 
         const { error: priceError } = await supabaseAdmin
             .from("assets")
@@ -105,6 +141,19 @@ export async function POST(req) {
         if (priceError) {
             console.error("Erro ao atualizar preço:", priceError);
             return NextResponse.json({ error: priceError.message }, { status: 500 });
+        }
+
+        // ✅ REGISTAR PREÇO HISTÓRICO (apenas o NOVO preço)
+        const { error: historyError } = await supabaseAdmin
+            .from("asset_prices")
+            .insert({
+                asset_id: asset_id,
+                price: newPrice, // ← NOVO preço (após flutuação)
+                recorded_at: new Date().toISOString()
+            });
+
+        if (historyError) {
+            console.warn("⚠️ Erro ao registrar preço histórico:", historyError);
         }
 
         // Retornar sucesso
