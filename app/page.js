@@ -682,6 +682,9 @@ export default function Home() {
               src={data.topPerformer.image}
               alt={data.topPerformer.name}
               className="w-8 h-8 rounded-full border-2 border-blue-500"
+              onError={(e) => {
+                e.target.src = `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyw_WCf0AuJKmTSJjAbwjap9tpBpxYSNQr-A&s`;
+              }}
             />
             <div className="flex-1">
               <p className="font-bold text-gray-900 dark:text-white text-sm">
@@ -714,6 +717,9 @@ export default function Home() {
                     src={asset.image_url}
                     alt={asset.name}
                     className="w-6 h-6 rounded-full"
+                    onError={(e) => {
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(asset.name)}&background=3B82F6&color=ffffff&size=128`;
+                    }}
                   />
                   <span className="font-medium text-gray-700 dark:text-gray-300 text-xs">
                     {asset.symbol}
@@ -1127,6 +1133,9 @@ export default function Home() {
                       src={asset.image_url}
                       alt={asset.name}
                       className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-2xl object-cover border-4 border-white dark:border-gray-600 shadow-lg group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(asset.name)}&background=3B82F6&color=ffffff&size=128`;
+                      }}
                     />
                   )}
                 </div>
