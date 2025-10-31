@@ -899,7 +899,7 @@ export default function Home() {
         </div>
 
         {/* Botões de autenticação */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
+        {/*<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
           <button
             onClick={() => setAuthModal('login')}
             className="px-6 py-3 sm:px-8 sm:py-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
@@ -911,8 +911,24 @@ export default function Home() {
             className="px-6 py-3 sm:px-8 sm:py-4 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
           >
             Registar
-          </button>
-        </div>
+          </button> 
+</div>*/}
+
+<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
+  <Link
+    href="/login"
+    className="px-6 py-3 sm:px-8 sm:py-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
+  >
+    Login
+  </Link>
+
+  <Link
+    href="/register"
+    className="px-6 py-3 sm:px-8 sm:py-4 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
+  >
+    Registar
+  </Link>
+</div>
 
         {/* Estado do usuário */}
         {user ? (
