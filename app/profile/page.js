@@ -1,7 +1,10 @@
 import { supabase } from '@/lib/supabaseClient';
 
 export default async function ProfilePage() {
-    const user = supabase.auth.user();
+    //const user = supabase.auth.user();
+const {
+  data: { user },
+} = await supabase.auth.getUser();
     if (!user) return <p>Por favor faça login</p>;
 
     const { data: userInfo } = await supabase
