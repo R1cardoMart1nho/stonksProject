@@ -873,33 +873,104 @@ export default function Home() {
 
   // HTML
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background text-foreground p-4 sm:p-6 lg:p-8">
+    <>
+      {/* ✅ NOVO HEADER FIXO NO TOPO */}
+      <header className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                OneStonks
+              </h1>
+            </div>
 
-      {/* Botão de tema */}
-      <button
+            {/* Menu Direita - Tema + Auth */}
+            <div className="flex items-center gap-3">
+              {/* Botão Tema */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                title={isDark ? 'Modo claro' : 'Modo escuro'}
+              >
+                {isDark ? '🌞' : '🌙'}
+              </button>
+
+              {/* Auth Menu */}
+              {!user ? (
+                // 👤 NÃO AUTENTICADO
+                <div className="flex gap-2">
+                  <Link
+                    href="/login"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm"
+                  >
+                    Entrar
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors font-medium text-sm"
+                  >
+                    Registar
+                  </Link>
+                </div>
+              ) : (
+                // 👤 AUTENTICADO - DROPDOWN SIMPLES
+                <div className="relative group">
+                  <button className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span>👤</span>
+                    <span className="font-medium text-gray-800 dark:text-white text-sm">
+                      {user.email?.split('@')[0]}
+                    </span>
+                  </button>
+
+                  <div className="absolute right-0 top-full mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <Link
+                      href="/portfolio"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg transition-colors"
+                    >
+                      💼 Portfólio
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 rounded-b-lg transition-colors"
+                    >
+                      🚪 Sair
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="flex min-h-screen items-center justify-center bg-background text-foreground p-4 sm:p-6 lg:p-8">
+
+        {/* Botão de tema */}
+        {/* <button
         onClick={toggleTheme}
         className="absolute top-4 right-4 p-2 sm:p-3 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300 shadow-lg border border-gray-300 dark:border-gray-600 z-10"
         aria-label="Alternar tema"
       >
         {isDark ? '🌙' : '☀️'}
-      </button>
+      </button> */}
 
-      <div className="text-center w-full max-w-7xl mx-auto px-2 sm:px-4">
-        {/* Cabeçalho */}
-        <div className="mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            OneStonks
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-1 sm:mb-2">
-            Bem-vindo ao OneStonks!
-          </p>
-          <p className="text-base sm:text-lg text-gray-500 dark:text-gray-500">
-            (ou um Comédia Stonks... Vamos ver)
-          </p>
-        </div>
+        <div className="text-center w-full max-w-7xl mx-auto px-2 sm:px-4">
+          {/* Cabeçalho */}
+          <div className="mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              OneStonks
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-1 sm:mb-2">
+              Bem-vindo ao OneStonks!
+            </p>
+            <p className="text-base sm:text-lg text-gray-500 dark:text-gray-500">
+              (ou um Comédia Stonks... Vamos ver)
+            </p>
+          </div>
 
-        {/* Botões de autenticação */}
-        {/*<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
+          {/* Botões de autenticação */}
+          {/*<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
           <button
             onClick={() => setAuthModal('login')}
             className="px-6 py-3 sm:px-8 sm:py-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
@@ -914,327 +985,327 @@ export default function Home() {
           </button> 
 </div>*/}
 
-<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
-  <Link
-    href="/login"
-    className="px-6 py-3 sm:px-8 sm:py-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
-  >
-    Login
-  </Link>
+          {/* <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 justify-center">
+            <Link
+              href="/login"
+              className="px-6 py-3 sm:px-8 sm:py-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Login
+            </Link>
 
-  <Link
-    href="/register"
-    className="px-6 py-3 sm:px-8 sm:py-4 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
-  >
-    Registar
-  </Link>
-</div>
+            <Link
+              href="/register"
+              className="px-6 py-3 sm:px-8 sm:py-4 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white rounded-xl transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Registar
+            </Link>
+          </div> */}
 
-        {/* Estado do usuário */}
-        {user ? (
-          <div className="mb-8 sm:mb-12 p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-gray-200 dark:border-gray-700 max-w-2xl mx-auto">
-            <p className="text-xl sm:text-2xl mb-4 sm:mb-6 text-gray-800 dark:text-white">
-              Olá, <span className="font-bold text-blue-600 dark:text-blue-400">{user.email}</span>
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <Link
-                href="/portfolio"
-                className="px-6 py-2 sm:px-8 sm:py-3 bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white rounded-lg transition-all duration-200 font-semibold text-sm sm:text-base hover:scale-105"
-              >
-                Portefólio
-              </Link>
-              <button
-                className="px-6 py-2 sm:px-8 sm:py-3 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white rounded-lg transition-all duration-200 font-semibold text-sm sm:text-base hover:scale-105"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
+          {/* Estado do usuário */}
+          {/* {user ? (
+            <div className="mb-8 sm:mb-12 p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-gray-200 dark:border-gray-700 max-w-2xl mx-auto">
+              <p className="text-xl sm:text-2xl mb-4 sm:mb-6 text-gray-800 dark:text-white">
+                Olá, <span className="font-bold text-blue-600 dark:text-blue-400">{user.email}</span>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <Link
+                  href="/portfolio"
+                  className="px-6 py-2 sm:px-8 sm:py-3 bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white rounded-lg transition-all duration-200 font-semibold text-sm sm:text-base hover:scale-105"
+                >
+                  Portefólio
+                </Link>
+                <button
+                  className="px-6 py-2 sm:px-8 sm:py-3 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white rounded-lg transition-all duration-200 font-semibold text-sm sm:text-base hover:scale-105"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="mb-8 sm:mb-12 p-4 sm:p-6 bg-yellow-100 dark:bg-yellow-900 rounded-lg sm:rounded-xl border border-yellow-300 dark:border-yellow-700 max-w-md mx-auto">
-            <p className="text-yellow-800 dark:text-yellow-200 text-base sm:text-lg">
-              Não está logado
-            </p>
-          </div>
-        )}
-
-        {/* GRÁFICO COM CONTROLES */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
-              📈 Performance do Mercado
-            </h2>
-
-            {/* Controles do Gráfico */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              {/* Modos de Visualização */}
-              <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                {[
-                  { key: 'all', label: '🌍 Todos', desc: 'Todo o mercado' },
-                  { key: 'portfolio', label: '💼 Meu Portfólio', desc: 'Os teus ativos' },
-                  { key: 'search', label: '🔍 Filtrado', desc: 'Por pesquisa' }
-                ].map((mode) => (
-                  <button
-                    key={mode.key}
-                    onClick={() => {
-                      setChartMode(mode.key);
-                      if (mode.key !== 'search') {
-                        setSearchTerm('');
-                      }
-                    }}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${chartMode === mode.key
-                      ? 'bg-white dark:bg-gray-600 shadow-sm text-gray-900 dark:text-white'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                      }`}
-                  >
-                    {mode.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Timeframes */}
-              <select
-                value={chartTimeRange}
-                onChange={(e) => setChartTimeRange(e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="1D">1 Dia</option>
-                <option value="1S">1 Semana</option>
-                <option value="1M">1 Mês</option>
-                <option value="3M">3 Meses</option>
-                <option value="6M">6 Meses</option>
-                <option value="1Y">1 Ano</option>
-                <option value="YTD">YTD</option>
-              </select>
+          ) : (
+            <div className="mb-8 sm:mb-12 p-4 sm:p-6 bg-yellow-100 dark:bg-yellow-900 rounded-lg sm:rounded-xl border border-yellow-300 dark:border-yellow-700 max-w-md mx-auto">
+              <p className="text-yellow-800 dark:text-yellow-200 text-base sm:text-lg">
+                Não está logado
+              </p>
             </div>
-          </div>
+          )} */}
 
-          {/* Indicador do modo atual */}
-          <div className="text-center mb-4">
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
-              {chartMode === 'all' && '🌍 A mostrar todo o mercado (todos os users)'}
-              {chartMode === 'portfolio' && (user ? '💼 A mostrar os teus assets (dados de todos os users)' : '💼 Faz login para veres o teu portfólio')}
-              {chartMode === 'search' && (searchTerm ? `🔍 A mostrar resultados para "${searchTerm}"` : '🔍 Pesquisa por nome ou símbolo')}
+          {/* GRÁFICO COM CONTROLES */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
+                📈 Performance do Mercado
+              </h2>
 
-              {chartData.length > 0 && (
-                <span className="ml-2 text-gray-500">
-                  ({getChartData().length} dias, {assets.length} ativos)
-                </span>
-              )}
-            </p>
-          </div>
-
-          {/* Gráfico */}
-          <div className="h-80 w-full">
-            {isLoadingChart ? (
-              <div className="flex flex-col items-center justify-center h-full space-y-3">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                <p className="text-gray-500 dark:text-gray-400">
-                  {chartMode === 'portfolio' ? 'A carregar o teu portfólio...' : 'A carregar dados...'}
-                </p>
-              </div>
-            ) : getChartData().length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full space-y-3 text-center">
-                <p className="text-gray-500 dark:text-gray-400 text-lg">
-                  {chartMode === 'portfolio' && user && '📭 Ainda não tens transações no teu portfólio'}
-                  {chartMode === 'search' && searchTerm && '🔍 Nenhum resultado encontrado'}
-                  {chartMode === 'all' && '📊 Sem dados históricos disponíveis'}
-                </p>
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={getChartData() || []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="date" stroke="#6b7280" />
-                  <YAxis stroke="#6b7280" />
-                  <Tooltip content={<CustomTooltip />} />
-
-                  {/* Gerar uma linha para cada asset único */}
-                  {assets.map((asset) => {
-                    // Verificar se este asset tem dados no gráfico atual
-                    const hasData = getChartData().some(day => day[asset.symbol] !== undefined);
-
-                    if (!hasData) return null;
-
-                    // Cores consistentes baseadas no índice
-                    const colors = [
-                      '#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6',
-                      '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1'
-                    ];
-                    const colorIndex = assets.findIndex(a => a.id === asset.id) % colors.length;
-
-                    return (
-                      <Line
-                        key={asset.id} // ✅ Key única baseada no ID
-                        type="monotone"
-                        dataKey={asset.symbol}
-                        name={asset.name}
-                        stroke={colors[colorIndex]}
-                        strokeWidth={2}
-                        dot={false}
-                        activeDot={{ r: 4 }}
-                      />
-                    );
-                  })}
-
-                  {/* Linha especial só para o top performer com imagens */}
-                  <Line
-                    type="monotone"
-                    dataKey="topPerformer.price"
-                    name="🎯 Top Performer"
-                    stroke="#FFD700"
-                    strokeWidth={3}
-                    dot={<CustomDot />}
-                    activeDot={{ r: 8 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-        </div>
-
-        {/* MERCADO COM FILTROS - container abaixo */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
-              🎭 Mercado de Humoristas
-            </h2>
-
-            {/* Filtros e Ordenação */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Barra de pesquisa */}
-              <div className="sm:w-64">
-                <input
-                  type="text"
-                  placeholder="🔍 Pesquisar..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Ordenação */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="name">Nome A-Z</option>
-                <option value="price_asc">Preço ↑</option>
-                <option value="price_desc">Preço ↓</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Contador de resultados */}
-          <div className="text-center mb-6">
-            <p className="text-gray-600 dark:text-gray-400">
-              Mostrando <span className="font-semibold">{filteredAndSortedAssets.length}</span> de{' '}
-              <span className="font-semibold">{assets.length}</span> ativos
-            </p>
-          </div>
-
-          {/* Grid de Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
-            {filteredAndSortedAssets.map((asset) => (
-              <div
-                key={asset.id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600 flex flex-col w-full min-w-0 group"
-              >
-                {/* IMAGEM GRANDE */}
-                <div className="flex justify-center mb-3">
-                  {asset.image_url && (
-                    <img
-                      src={asset.image_url}
-                      alt={asset.name}
-                      className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-2xl object-cover border-4 border-white dark:border-gray-600 shadow-lg group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(asset.name)}&background=3B82F6&color=ffffff&size=128`;
+              {/* Controles do Gráfico */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                {/* Modos de Visualização */}
+                <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                  {[
+                    { key: 'all', label: '🌍 Todos', desc: 'Todo o mercado' },
+                    { key: 'portfolio', label: '💼 Meu Portfólio', desc: 'Os teus ativos' },
+                    // { key: 'search', label: '🔍 Filtrado', desc: 'Por pesquisa' }
+                  ].map((mode) => (
+                    <button
+                      key={mode.key}
+                      onClick={() => {
+                        setChartMode(mode.key);
+                        if (mode.key !== 'search') {
+                          setSearchTerm('');
+                        }
                       }}
-                    />
-                  )}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${chartMode === mode.key
+                        ? 'bg-white dark:bg-gray-600 shadow-sm text-gray-900 dark:text-white'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                        }`}
+                    >
+                      {mode.label}
+                    </button>
+                  ))}
                 </div>
 
-                {/* Nome e Símbolo JUNTOS */}
-                <div className="text-center mb-3 min-w-0">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <h3 className="font-bold text-gray-800 dark:text-white text-lg sm:text-xl">
-                      {asset.name}
-                    </h3>
-                    <span className="text-blue-600 dark:text-blue-400 font-mono text-sm bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full border border-blue-200 dark:border-blue-700">
-                      {asset.symbol}
-                    </span>
-                  </div>
-                </div>
+                {/* Timeframes */}
+                <select
+                  value={chartTimeRange}
+                  onChange={(e) => setChartTimeRange(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="1D">1 Dia</option>
+                  <option value="1S">1 Semana</option>
+                  <option value="1M">1 Mês</option>
+                  <option value="3M">3 Meses</option>
+                  <option value="6M">6 Meses</option>
+                  <option value="1Y">1 Ano</option>
+                  <option value="YTD">YTD</option>
+                </select>
+              </div>
+            </div>
 
-                {/* Preço */}
-                <div className="text-center mb-4">
-                  <p className="text-green-600 dark:text-green-400 font-bold text-2xl sm:text-3xl">
-                    {asset.current_price}€
+            {/* Indicador do modo atual */}
+            <div className="text-center mb-4">
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                {chartMode === 'all' && '🌍 A mostrar todo o mercado (todos os users)'}
+                {chartMode === 'portfolio' && (user ? '💼 A mostrar os teus assets (dados de todos os users)' : '💼 Faz login para veres o teu portfólio')}
+                {chartMode === 'search' && (searchTerm ? `🔍 A mostrar resultados para "${searchTerm}"` : '🔍 Pesquisa por nome ou símbolo')}
+
+                {chartData.length > 0 && (
+                  <span className="ml-2 text-gray-500">
+                    ({getChartData().length} dias, {assets.length} ativos)
+                  </span>
+                )}
+              </p>
+            </div>
+
+            {/* Gráfico */}
+            <div className="h-80 w-full">
+              {isLoadingChart ? (
+                <div className="flex flex-col items-center justify-center h-full space-y-3">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {chartMode === 'portfolio' ? 'A carregar o teu portfólio...' : 'A carregar dados...'}
                   </p>
                 </div>
+              ) : getChartData().length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full space-y-3 text-center">
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">
+                    {chartMode === 'portfolio' && user && '📭 Ainda não tens transações no teu portfólio'}
+                    {chartMode === 'search' && searchTerm && '🔍 Nenhum resultado encontrado'}
+                    {chartMode === 'all' && '📊 Sem dados históricos disponíveis'}
+                  </p>
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={getChartData() || []}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="date" stroke="#6b7280" />
+                    <YAxis stroke="#6b7280" />
+                    <Tooltip content={<CustomTooltip />} />
 
-                {/* Botões */}
-                {/* Botões com input toggle - Versão Compacta */}
-                <div className="space-y-2 w-full min-w-0 mt-auto">
-                  {showInputFor === asset.id && (
-                    <input
-                      type="number"
-                      min="1"
-                      defaultValue="1"
-                      className="w-full text-center rounded-lg bg-white dark:bg-gray-600 border-2 border-blue-500 text-gray-900 dark:text-white px-3 py-2 text-sm font-semibold focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 shadow-inner animate-scale-in"
-                      onChange={(e) => setQuantities({ ...quantities, [asset.id]: Number(e.target.value) })}
-                      autoFocus
+                    {/* Gerar uma linha para cada asset único */}
+                    {assets.map((asset) => {
+                      // Verificar se este asset tem dados no gráfico atual
+                      const hasData = getChartData().some(day => day[asset.symbol] !== undefined);
+
+                      if (!hasData) return null;
+
+                      // Cores consistentes baseadas no índice
+                      const colors = [
+                        '#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6',
+                        '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1'
+                      ];
+                      const colorIndex = assets.findIndex(a => a.id === asset.id) % colors.length;
+
+                      return (
+                        <Line
+                          key={asset.id} // ✅ Key única baseada no ID
+                          type="monotone"
+                          dataKey={asset.symbol}
+                          name={asset.name}
+                          stroke={colors[colorIndex]}
+                          strokeWidth={2}
+                          dot={false}
+                          activeDot={{ r: 4 }}
+                        />
+                      );
+                    })}
+
+                    {/* Linha especial só para o top performer com imagens */}
+                    <Line
+                      type="monotone"
+                      dataKey="topPerformer.price"
+                      name="🎯 Top Performer"
+                      stroke="#FFD700"
+                      strokeWidth={3}
+                      dot={<CustomDot />}
+                      activeDot={{ r: 8 }}
                     />
-                  )}
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
 
-                  <div className="flex gap-2 w-full min-w-0">
-                    <button
-                      className={`flex-1 py-3 rounded-lg transition-all duration-200 font-semibold text-sm transform hover:scale-[1.02] shadow-md ${showInputFor === asset.id
-                        ? 'bg-green-500 hover:bg-green-600 text-white'
-                        : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white'
-                        }`}
-                      onClick={() => {
-                        if (showInputFor === asset.id) {
-                          handleBuy(asset.id, quantities[asset.id] || 1);
-                          setShowInputFor(null);
-                        } else {
-                          setShowInputFor(asset.id);
-                          setQuantities({ ...quantities, [asset.id]: 1 });
-                        }
-                      }}
-                    >
-                      {showInputFor === asset.id ? 'Comprar' : 'Comprar'}
-                    </button>
-                    <button
-                      className={`flex-1 py-3 rounded-lg transition-all duration-200 font-semibold text-sm transform hover:scale-[1.02] shadow-md ${showInputFor === asset.id
-                        ? 'bg-red-500 hover:bg-red-600 text-white'
-                        : 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white'
-                        }`}
-                      onClick={() => {
-                        if (showInputFor === asset.id) {
-                          handleSell(asset.id, quantities[asset.id] || 1);
-                          setShowInputFor(null);
-                        } else {
-                          setShowInputFor(asset.id);
-                          setQuantities({ ...quantities, [asset.id]: 1 });
-                        }
-                      }}
-                    >
-                      {showInputFor === asset.id ? 'Vender' : 'Vender'}
-                    </button>
+          {/* MERCADO COM FILTROS - container abaixo */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
+                🎭 Mercado de Humoristas
+              </h2>
+
+              {/* Filtros e Ordenação */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                {/* Barra de pesquisa */}
+                <div className="sm:w-64">
+                  <input
+                    type="text"
+                    placeholder="🔍 Pesquisar..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                {/* Ordenação */}
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="name">Nome A-Z</option>
+                  <option value="price_asc">Preço ↑</option>
+                  <option value="price_desc">Preço ↓</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Contador de resultados */}
+            <div className="text-center mb-6">
+              <p className="text-gray-600 dark:text-gray-400">
+                Mostrando <span className="font-semibold">{filteredAndSortedAssets.length}</span> de{' '}
+                <span className="font-semibold">{assets.length}</span> ativos
+              </p>
+            </div>
+
+            {/* Grid de Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
+              {filteredAndSortedAssets.map((asset) => (
+                <div
+                  key={asset.id}
+                  className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600 flex flex-col w-full min-w-0 group"
+                >
+                  {/* IMAGEM GRANDE */}
+                  <div className="flex justify-center mb-3">
+                    {asset.image_url && (
+                      <img
+                        src={asset.image_url}
+                        alt={asset.name}
+                        className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-2xl object-cover border-4 border-white dark:border-gray-600 shadow-lg group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(asset.name)}&background=3B82F6&color=ffffff&size=128`;
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  {/* Nome e Símbolo JUNTOS */}
+                  <div className="text-center mb-3 min-w-0">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <h3 className="font-bold text-gray-800 dark:text-white text-lg sm:text-xl">
+                        {asset.name}
+                      </h3>
+                      <span className="text-blue-600 dark:text-blue-400 font-mono text-sm bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full border border-blue-200 dark:border-blue-700">
+                        {asset.symbol}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Preço */}
+                  <div className="text-center mb-4">
+                    <p className="text-green-600 dark:text-green-400 font-bold text-2xl sm:text-3xl">
+                      {asset.current_price}€
+                    </p>
+                  </div>
+
+                  {/* Botões */}
+                  {/* Botões com input toggle - Versão Compacta */}
+                  <div className="space-y-2 w-full min-w-0 mt-auto">
+                    {showInputFor === asset.id && (
+                      <input
+                        type="number"
+                        min="1"
+                        defaultValue="1"
+                        className="w-full text-center rounded-lg bg-white dark:bg-gray-600 border-2 border-blue-500 text-gray-900 dark:text-white px-3 py-2 text-sm font-semibold focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 shadow-inner animate-scale-in"
+                        onChange={(e) => setQuantities({ ...quantities, [asset.id]: Number(e.target.value) })}
+                        autoFocus
+                      />
+                    )}
+
+                    <div className="flex gap-2 w-full min-w-0">
+                      <button
+                        className={`flex-1 py-3 rounded-lg transition-all duration-200 font-semibold text-sm transform hover:scale-[1.02] shadow-md ${showInputFor === asset.id
+                          ? 'bg-green-500 hover:bg-green-600 text-white'
+                          : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white'
+                          }`}
+                        onClick={() => {
+                          if (showInputFor === asset.id) {
+                            handleBuy(asset.id, quantities[asset.id] || 1);
+                            setShowInputFor(null);
+                          } else {
+                            setShowInputFor(asset.id);
+                            setQuantities({ ...quantities, [asset.id]: 1 });
+                          }
+                        }}
+                      >
+                        {showInputFor === asset.id ? 'Comprar' : 'Comprar'}
+                      </button>
+                      <button
+                        className={`flex-1 py-3 rounded-lg transition-all duration-200 font-semibold text-sm transform hover:scale-[1.02] shadow-md ${showInputFor === asset.id
+                          ? 'bg-red-500 hover:bg-red-600 text-white'
+                          : 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white'
+                          }`}
+                        onClick={() => {
+                          if (showInputFor === asset.id) {
+                            handleSell(asset.id, quantities[asset.id] || 1);
+                            setShowInputFor(null);
+                          } else {
+                            setShowInputFor(asset.id);
+                            setQuantities({ ...quantities, [asset.id]: 1 });
+                          }
+                        }}
+                      >
+                        {showInputFor === asset.id ? 'Vender' : 'Vender'}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
 
-        {/* Modal de Autenticação */}
-        {/* {authModal && ( */}
-        {/* <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          {/* Modal de Autenticação */}
+          {/* {authModal && ( */}
+          {/* <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-6 sm:p-8 animate-scale-in">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
@@ -1320,8 +1391,9 @@ export default function Home() {
           </div>
         )}
          */}
-      </div >
-    </main >
+        </div >
+      </main >
+    </>
   );
 
 }

@@ -74,3 +74,17 @@ button:disabled {
         transform: scale(1);
     }
 }
+
+/* No teu CSS global */
+.group:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease-in-out;
+}
