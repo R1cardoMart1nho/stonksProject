@@ -1,3 +1,24 @@
+// OneStonks - Plataforma de Simulação de Mercado
+
+// @author Ricardo Martinho
+// @github https://github.com/R1cardoMart1nho/stonksProject
+// @linkedin https://www.linkedin.com/in/ricardomartinho01/
+
+// 🚀 Stack:
+// - Frontend: Next.js 14, React, Tailwind CSS
+// - Backend: Supabase (PostgreSQL, Auth, Storage)
+// - Gráficos: Recharts
+// - Deploy: Vercel
+
+// 📈 Funcionalidades:
+// - Autenticação de utilizadores
+// - Compra/venda de ativos com flutuação de preços
+// - Gráficos em tempo real
+// - Portfolio pessoal
+// - Modo light/dark
+
+// 🎯 Objetivo: Projeto full-stack para demonstração de skills para portfolio
+
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -1391,6 +1412,75 @@ export default function Home() {
           </div>
         )}
          */}
+
+          {/* ✅ FOOTER PROFISSIONAL */}
+          <footer className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <div className="max-w-4xl mx-auto px-4 text-center">
+
+              {/* Logo e Descrição */}
+              <div className="mb-6">
+                {/* <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                  OneStonks
+                </h3> */}
+                <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                  Desenvolvido como projeto full-stack com Next.js, Supabase e React.
+                </p>
+              </div>
+
+              {/* Links e Info */}
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-6">
+                {/* Tech Stack */}
+                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="flex items-center gap-1">
+                    ⚡ Next.js
+                  </span>
+                  <span className="flex items-center gap-1">
+                    🗄️ Supabase
+                  </span>
+                  <span className="flex items-center gap-1">
+                    📊 Recharts
+                  </span>
+                </div>
+
+                {/* Separador */}
+                <div className="hidden sm:block w-px h-6 bg-gray-300 dark:bg-gray-600"></div>
+
+                {/* Links */}
+                <div className="flex items-center gap-6">
+                  <a
+                    href="https://github.com/R1cardoMart1nho/stonksProject"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
+                    <span>📁</span>
+                    GitHub
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/ricardomartinho01/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
+                    <span>💼</span>
+                    LinkedIn
+                  </a>
+                </div>
+              </div>
+
+              {/* Copyright e Créditos */}
+              <div className="pt-6 border-t border-gray-100 dark:border-gray-800">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  © {new Date().getFullYear()} Desenvolvido por <strong>Ricardo Martinho</strong> •
+                  Projeto para portfolio
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                  Dados simulados até à data para fins ilustrativos • Versão 1.0
+                </p>
+              </div>
+            </div>
+          </footer>
+
         </div >
       </main >
     </>
